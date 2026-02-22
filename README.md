@@ -22,19 +22,28 @@ A modern, cyberpunk-themed terminal UI for searching torrents. Search, browse, a
 *Screenshots coming soon*
 
 ## Installation
+### Quick Install (Linux / macOS)
+```bash
+curl -fsSL https://raw.githubusercontent.com/vidya-hub/openloot/main/install.sh | sh
+```
 
+This auto-detects your OS and architecture, downloads the latest release binary, and installs it to `/usr/local/bin`.
 ### via npm
 ```bash
 npm i -g openloot
 ```
-
 ### via bun
 ```bash
 bun add -g openloot
 ```
-
 ### From Releases
-Download the standalone binary for your platform (Linux/macOS) from the [Releases](https://github.com/vidya-hub/openloot/releases) page.
+Download the standalone binary for your platform from the [Releases](https://github.com/vidya-hub/openloot/releases) page:
+```bash
+# Example: Linux x64
+curl -fsSL https://github.com/vidya-hub/openloot/releases/latest/download/openloot-linux-x64 -o openloot
+chmod +x openloot
+sudo mv openloot /usr/local/bin/
+```
 
 ## Usage
 
