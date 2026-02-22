@@ -40,7 +40,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - runner: macos-13
+          # Both run on macos-14 (arm64) - Bun cross-compiles x64 target
+          - runner: macos-14
             target: bun-darwin-x64
             artifact: openloot-darwin-x64
           - runner: macos-14
