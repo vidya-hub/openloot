@@ -1,0 +1,39 @@
+{
+  "name": "openloot",
+  "version": "1.0.0",
+  "description": "A modern terminal UI for searching torrents, built with Ink and React",
+  "module": "src/index.tsx",
+  "type": "module",
+  "bin": {
+    "openloot": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "bun run src/index.tsx",
+    "dev": "bun --watch run src/index.tsx",
+    "typecheck": "tsc --noEmit",
+    "build": "bun build src/index.tsx --outdir dist --target node",
+    "compile": "bun build src/index.tsx --compile --outfile dist/openloot"
+  },
+  "keywords": [
+    "torrent",
+    "tui",
+    "cli",
+    "search",
+    "ink",
+    "react",
+    "terminal"
+  ],
+  "author": "vidya-hub",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.0.0",
+    "react-devtools-core": "^7.0.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "ink": "^6.8.0",
+    "ink-text-input": "^6.0.0",
+    "react": "^19.0.0"
+  }
+}
