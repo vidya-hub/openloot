@@ -1,12 +1,11 @@
 name: Release
-
 on:
   push:
     tags:
       - 'v*'
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,10 +14,6 @@ jobs:
             artifact: openloot-linux-x64
           - target: bun-linux-arm64
             artifact: openloot-linux-arm64
-          - target: bun-darwin-x64
-            artifact: openloot-darwin-x64
-          - target: bun-darwin-arm64
-            artifact: openloot-darwin-arm64
     steps:
       - uses: actions/checkout@v4
 
@@ -41,20 +36,56 @@ jobs:
           name: ${{ matrix.artifact }}
           path: dist/${{ matrix.artifact }}
 
+  build-macos:
+    strategy:
+      matrix:
+        include:
+          - runner: macos-13
+            target: bun-darwin-x64
+            artifact: openloot-darwin-x64
+          - runner: macos-14
+            target: bun-darwin-arm64
+            artifact: openloot-darwin-arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build binary
+        run: bun build --compile --minify --target=${{ matrix.target }} ./src/index.tsx --outfile dist/${{ matrix.artifact }}
+
+      - name: Make binary executable
+        run: chmod +x dist/${{ matrix.artifact }}
+
+      - name: Remove quarantine attribute
+        run: xattr -cr dist/${{ matrix.artifact }}
+
+      - name: Ad-hoc code sign
+        run: codesign --force --sign - dist/${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
   release:
-    needs: build
+    needs: [build-linux, build-macos]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           merge-multiple: true
           path: dist
-
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
